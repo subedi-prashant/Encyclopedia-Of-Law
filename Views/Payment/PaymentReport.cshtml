@@ -1,0 +1,46 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+    Layout = null;
+
+    
+}
+<h1>Payment Report</h1>
+
+<div id="paymentContainer"></div>
+
+
+
+<script>
+    var pid = getQueryParamValue('pidx');
+    if(pid !=null){
+        window.onload = function () {
+            window.location.href = `https://test-pay.khalti.com/?pidx=${pid}`
+        }
+    }
+   
+
+    // Function to get the value of a query parameter by name
+    function getQueryParamValue(name) {
+        // Get the query string part of the URL
+        var queryString = window.location.search.substring(1);
+
+        // Split the query string into key-value pairs
+        var queryParams = queryString.split('&');
+
+        // Loop through the key-value pairs to find the desired parameter
+        for (var i = 0; i < queryParams.length; i++) {
+            var pair = queryParams[i].split('=');
+            if (pair[0] === name) {
+                // Return the value if the parameter name matches
+                return decodeURIComponent(pair[1]);
+            }
+        }
+        // Return null if the parameter is not found
+        return null;
+    }
+
+    
+
+</script>
+   

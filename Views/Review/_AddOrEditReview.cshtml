@@ -1,0 +1,88 @@
+﻿@model Request
+
+
+<link href="~/starRating/starstyle.css" rel="stylesheet" />
+
+<form asp-action="@(Model.ReviewStatus == "Reviewed" ? "Edit" : "Add")Review" asp-controller="Review">
+
+    <div class="modal fade" id="verticalycentered AddReview" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AddReviewLabel">@(Model.ReviewStatus == "Reviewed" ? "Edit" : "Add") Review</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+
+                <div class="modal-body">
+
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="col-12">
+                        <input asp-for="RequestId" type="hidden" />
+                        <input asp-for="LawyerId" type="hidden" />
+                        <input asp-for="UserId" type="hidden" />
+                        <input asp-for="RequestDate" type="hidden" />
+                        <input asp-for="AssignedDate" type="hidden" />
+                        <input asp-for="RequestStatus" type="hidden" />
+                        <input asp-for="Subject" type="hidden" />
+                        <input asp-for="Message" type="hidden" />
+                        <input asp-for="ReviewStatus" type="hidden" />
+                        <input asp-for="ReviewDate" type="hidden" />
+                    </div>
+
+                    <div class="container">
+                        <div class="rating-wrap">
+
+                            <div class="center">
+                                <fieldset class="rating">
+                                    <input asp-for="Rating" type="radio" id="star5" name="rating" value="5" class="js-star" />
+                                    <label for="star5" class="full" title="5"></label>
+                                    <input asp-for="Rating" type="radio" id="star4" name="rating" value="4" class="js-star" />
+                                    <label for="star4" class="full" title="4"></label>
+                                    <input asp-for="Rating" type="radio" id="star3" name="rating" value="3" class="js-star" />
+                                    <label for="star3" class="full" title="3"></label>
+                                    <input asp-for="Rating" type="radio" id="star2" name="rating" value="2" class="js-star" />
+                                    <label for="star2" class="full" title="2"></label>
+                                    <input asp-for="Rating" type="radio" id="star1" name="rating" value="1" class="js-star" />
+                                    <label for="star1" class="full" title="1"></label>
+                                </fieldset>
+                            </div>
+
+                            <h4 id="rating-value"></h4>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Review" class="control-label"></label>
+                        <input asp-for="Review" class="form-control" />
+                        <span asp-validation-for="Review" class="text-danger"></span>
+                    </div>
+
+
+
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div><!-- End Vertically centered Modal-->
+
+
+</form>
+
+
+@section Scripts {
+
+    <script>
+
+    </script>
+}

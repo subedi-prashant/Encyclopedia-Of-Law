@@ -1,0 +1,570 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+
+@using Encyclopedia_Of_Laws.Views.Shared.Components.SearchBar1
+@{
+
+    SPager pager = new SPager();
+    pager = ViewBag.SearchPager;
+
+}
+
+@inject SignInManager<ApplicationUser> SignInManager;
+@inject Encyclopedia_Of_Laws.Data.EncyclopediaOfLawsContext _context;
+
+
+@{
+    var returnUrl = Context.Request.Query["ReturnUrl"];
+    var Lawyeridd = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var LogedinId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var count = _context.Requests.Where(c => c.RequestStatus == "Pending" && c.LawyerId == Lawyeridd).Select(c => c.RequestId).Count();
+
+    var model = _context.Users.Where(u => u.Id == LogedinId).FirstOrDefault();
+    var profile = model.ProfilePicture;
+    var email = model.Email;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+
+    @*If the user is signed-in display Logout link*@
+    @if (SignInManager.IsSignedIn(User) && User.IsInRole("User"))
+    {
+        <title>User</title>
+    }
+    else if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+    {
+        <title>Dashboard</title>
+    }
+    else if (SignInManager.IsSignedIn(User) && User.IsInRole("Lawyer"))
+    {
+        <title>Lawyer</title>
+    }
+    else if (SignInManager.IsSignedIn(User) && User.IsInRole("Staff"))
+    {
+        <title>Staff</title>
+    }
+
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="~/Layout/assets/img/favicon.png" rel="icon">
+    <link href="~/Layout/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="~/Layout/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Layout/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/Layout/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="~/Layout/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="~/Layout/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="~/Layout/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="~/Layout/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+    <link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
+    <!-- Template Main CSS File -->
+    <link href="~/Layout/assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+            <a href="#" class="logo d-flex align-items-center">
+                <!-- <img src="~/Layout/assets/img/logo.png" alt=""> -->
+                @*If the user is signed-in display Logout link*@
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("User"))
+                {
+                    <span class="d-none d-lg-block"> User</span>
+                }
+                else if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                {
+                    <span class="d-none d-lg-block"> Admin</span>
+                }
+                else if (SignInManager.IsSignedIn(User) && User.IsInRole("Lawyer"))
+                {
+                    <span class="d-none d-lg-block"> Lawyer</span>
+                }
+                else if (SignInManager.IsSignedIn(User) && User.IsInRole("Staff"))
+                {
+                    <span class="d-none d-lg-block"> Staff</span>
+                }
+            </a>
+
+        </div><!-- End Logo -->
+
+        <nav class="header-nav ms-auto">
+            <ul class="d-flex align-items-center">
+
+                @if (User.IsInRole("Lawyer"))
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-primary badge-number">@count</span>
+                        </a><!-- End Notification Icon -->
+
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" id="ulNoti">
+                            <li class="dropdown-header">
+                                You have @count new notifications
+                                <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+
+                            @*  <li class="notification-item">
+                        <i class="bi bi-exclamation-circle text-warning"></i>
+                        <div>
+                            <h4>Lorem Ipsum</h4>
+                            <p>Quae dolorem earum veritatis oditseno</p>
+                            <p>30 min. ago</p>
+                        </div>
+                    </li>*@
+                            <li class="dropdown-footer">
+                                <a href="#">Show all notifications</a>
+                            </li>
+
+                        </ul><!-- End Notification Dropdown Items -->
+
+                    </li><!-- End Notification Nav -->
+
+                    @* <li class="nav-item dropdown">
+
+                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-chat-left-text"></i>
+                            <span class="badge bg-success badge-number">3</span>
+                        </a><!-- End Messages Icon -->
+
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                            <li class="dropdown-header">
+                                You have 3 new messages
+                                <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="message-item">
+                                <a href="#">
+                                    <img src="~/Layout/assets/img/messages-1.jpg" alt="" class="rounded-circle">
+                                    <div>
+                                        <h4>Maria Hudson</h4>
+                                        <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                        <p>4 hrs. ago</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="message-item">
+                                <a href="#">
+                                    <img src="~/Layout/assets/img/messages-2.jpg" alt="" class="rounded-circle">
+                                    <div>
+                                        <h4>Anna Nelson</h4>
+                                        <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                        <p>6 hrs. ago</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="message-item">
+                                <a href="#">
+                                    <img src="~/Layout/assets/img/messages-3.jpg" alt="" class="rounded-circle">
+                                    <div>
+                                        <h4>David Muldon</h4>
+                                        <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                        <p>8 hrs. ago</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="dropdown-footer">
+                                <a href="#">Show all messages</a>
+                            </li>
+
+                        </ul><!-- End Messages Dropdown Items -->
+
+                    </li><!-- End Messages Nav --> *@
+                }
+
+               
+                    <li class="nav-item dropdown pe-3">
+
+                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+
+                            @if (model.ProfilePicture != null)
+                            {
+                                <img src="~/images/@profile" alt="Profile" class="rounded-circle">
+                            }
+                            else
+                            {
+                                <img src="~/images/user-male.jpg" alt="Profile" class="rounded-circle">
+                            }
+                            <span class="d-none d-md-block dropdown-toggle ps-2">@User.Identity.Name</span>
+                        </a><!-- End Profile Iamge Icon -->
+
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                            <li class="dropdown-header">
+                                <h6> @User.Identity.Name </h6>
+                                <span> @email</span>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Lawyer"))
+                            {
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="LawyerInfo" asp-action="Profile" asp-route-id="@LogedinId">
+                                        <i class="bi bi-person"></i>
+                                        <span>My Profile</span>
+                                    </a>
+                                </li>
+                            }
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" asp-controller="Account" asp-action="Profile" asp-route-id="@LogedinId">
+                                    <i class="bi bi-gear"></i>
+                                    <span>Account Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            @if (SignInManager.IsSignedIn(User) && !User.IsInRole("Admin"))
+                            {
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                                        <i class="bi bi-question-circle"></i>
+                                        <span>Need Help?</span>
+                                    </a>
+                                </li>
+                            }
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <form method="post" asp-controller="Account" asp-action="Logout">
+                                    <button type="submit"
+                                            class="dropdown-item d-flex align-items-center">
+                                        <i class="bi bi-box-arrow-right"></i>
+                                        <span>Logout</span>
+                                    </button>
+                                </form>
+                            </li>
+
+                        </ul><!-- End Profile Dropdown Items -->
+                    </li><!-- End Profile Nav -->
+
+                </ul>
+        </nav><!-- End Icons Navigation -->
+
+    </header><!-- End Header -->
+    <!-- ======= Sidebar ======= -->
+    <aside id="sidebar" class="sidebar">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+            @*If the user is signed-in display Logout link*@
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole("User"))
+            {
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="LawyerInfo" asp-action="Index">
+                        <i class="bi bi-person-lines-fill"></i><span>Lawyers</span>
+                    </a>
+                </li><!-- End View Lawyers Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Request" asp-action="GetRequestsByUser">
+                        <i class="bi bi-clipboard-data"></i><span>Requests</span>
+                    </a>
+                </li><!-- End View Requests by user Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Request" asp-action="GetScheduleByUser">
+                        <i class="bi bi-clock"></i><span>Schedule</span>
+                    </a>
+                </li><!-- End View Schedule by user Nav -->
+
+               @*  <li class="nav-item">
+                    <a class="nav-link collapsed" asp-area="" asp-controller="Subject" asp-action="Index">
+                        <i class="bi bi-grid"></i><span>Law Subjects</span>
+                    </a>
+                </li> *@
+
+                @* <li class="nav-item">
+                    <a class="nav-link collapsed" asp-area="" asp-controller="Subject" asp-action="ChapterPage">
+                        <i class="bi bi-menu-button-wide"></i><span>Law Index</span>
+                    </a>
+                </li> *@
+            }
+
+
+            else if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            {
+                @* <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="AdminHome">
+                        <i class="bi bi-grid"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li><!-- End Home Nav --> *@
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>Manage Users</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a asp-area="" asp-controller="Administration" asp-action="ListUsers">
+                                <i class="bi bi-circle"></i><span>Users</span>
+                            </a>
+                            <a asp-area="" asp-controller="Administration" asp-action="ListRoles">
+                                <i class="bi bi-circle"></i><span>Roles</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Components Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="LawyerInfo" asp-action="Index">
+                        <i class="bi bi-person-lines-fill"></i><span>View Lawyers</span>
+                    </a>
+                </li><!-- End View Lawyers Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Administration" asp-action="ListUserIssues">
+                        <i class="bi bi-menu-button-wide"></i>
+                        <span>User Issues</span>
+                    </a>
+                </li>
+            }
+
+
+            else if (SignInManager.IsSignedIn(User) && User.IsInRole("Lawyer"))
+            {
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Request" asp-action="GetRequestsByLawyer">
+                        <i class="bi bi-menu-button-wide"></i><span>View Requests</span>
+                    </a>
+                </li><!-- End View Requests by Lawyer Nav -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Request" asp-action="GetScheduleByLawyer">
+                        <i class="bi bi-clock"></i><span>Schedule</span>
+                    </a>
+                </li><!-- End View Schedule by Lawyer Nav -->
+
+               @*  <li class="nav-item">
+                    <a class="nav-link collapsed" asp-area="" asp-controller="Subject" asp-action="Index">
+                        <i class="bi bi-menu-button-wide"></i><span>Law Subjects</span>
+                    </a>
+                </li> *@
+
+               @*  <li class="nav-item">
+                    <a class="nav-link collapsed" asp-area="" asp-controller="Subject" asp-action="ChapterPage">
+                        <i class="bi bi-menu-button-wide"></i><span>Law Index</span>
+                    </a>
+                </li> *@
+
+
+                <!-- End Components Nav -->
+            }
+
+
+            else if (SignInManager.IsSignedIn(User) && User.IsInRole("Staff"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-area="" asp-controller="Subject" asp-action="ChapterPage">
+                        <i class="bi bi-menu-button-wide"></i><span>الفهرس</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Staff" asp-action="LawPage">
+                        <i class="bi bi-menu-button-wide"></i><span>القوانين</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Staff" asp-action="PartPage">
+                        <i class="bi bi-menu-button-wide"></i><span>الأقسام</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Staff" asp-action="BookPage">
+                        <i class="bi bi-menu-button-wide"></i><span>الكتب</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Staff" asp-action="SectionPage">
+                        <i class="bi bi-menu-button-wide"></i><span>الأبواب</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Staff" asp-action="ChapterPage">
+                        <i class="bi bi-menu-button-wide"></i><span>الفصول</span>
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Staff" asp-action="SubjectPage">
+                        <i class="bi bi-menu-button-wide"></i><span>المواد</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#form-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-plus-circle"></i><span>إضافه</span> <i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="form-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a asp-controller="Staff" asp-action="Create_Law">
+                                <i class="bi bi-circle"></i><span>القوانين</span>
+                            </a>
+                            <a asp-controller="Staff" asp-action="Create_Part">
+                                <i class="bi bi-circle"></i><span>الأقسام</span>
+                            </a>
+                            <a asp-controller="Staff" asp-action="Create_Book">
+                                <i class="bi bi-circle"></i><span>الكتب</span>
+                            </a>
+                            <a asp-controller="Staff" asp-action="Create_Section">
+                                <i class="bi bi-circle"></i><span>الأبواب</span>
+                            </a>
+                            <a asp-controller="Staff" asp-action="Create_Chapter">
+                                <i class="bi bi-circle"></i><span>الفصول</span>
+                            </a>
+                            <a asp-controller="Staff" asp-action="Create_Subject">
+                                <i class="bi bi-circle"></i><span>المواد</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Forms Nav -->
+
+            }
+
+            <li> <hr /></li>
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Lawyer"))
+            {
+                <li>
+                    <a class="dropdown-item d-flex align-items-center" >
+                        <i class="bi bi-person"></i>
+                        <span>My Profile</span>
+                    </a>
+                </li>
+            }
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Lawyer"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="LawyerInfo" asp-action="Profile" asp-route-id="@LogedinId">
+                        <i class="bi bi-person"></i>
+                        <span>Profile</span>
+                    </a>
+                </li><!-- End Profile Page Nav -->
+            }
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" asp-controller="Account" asp-action="Profile" asp-route-id="@LogedinId">
+                    <i class="bi bi-gear"></i>
+                    <span>Account Settings</span>
+                </a>
+            </li><!-- End Profile Page Nav -->
+
+
+            <li class="nav-item">
+                <form method="post" asp-controller="Account" asp-action="Logout">
+                    <button type="submit"
+                            class="dropdown-item d-flex nav-link collapsed">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+            </li><!-- End Logout Page Nav -->
+
+        </ul>
+
+    </aside><!-- End Sidebar-->
+
+
+
+
+
+    <main id="main" class="main">
+
+        <div class="search-bar">
+            @if (ViewBag.Title.Contains("Page"))
+            {
+                <div class="searchpager">
+                    @await Component.InvokeAsync(typeof(SearchBar1ViewComponent), new { SearchPager = pager })
+
+                </div>
+            }
+        </div><!-- End Search Bar -->
+        @RenderBody()
+
+
+    </main><!-- End #main -->
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+    </footer><!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="~/Layout/assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="~/Layout/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Layout/assets/vendor/chart.js/chart.min.js"></script>
+    <script src="~/Layout/assets/vendor/echarts/echarts.min.js"></script>
+    <script src="~/Layout/assets/vendor/quill/quill.min.js"></script>
+    <script src="~/Layout/assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="~/Layout/assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="~/Layout/assets/vendor/php-email-form/validate.js"></script>
+
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/bootbox.js/bootbox.min.js"></script>
+
+
+    <!-- Template Main JS File -->
+    <script src="~/Layout/assets/js/main.js"></script>
+    <script src="~/Scripts/Notification.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    @await Component.InvokeAsync("NToastNotify")
+</body>
+
+</html>

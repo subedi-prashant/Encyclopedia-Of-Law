@@ -1,0 +1,62 @@
+﻿@model Request
+
+@{
+    ViewData["Title"] = "AssignDate";
+}
+
+<form asp-action="AssignDate" asp-controller="Request">
+
+    <div class="modal fade" id="verticalycentered Assign" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Assign a date</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+
+                <div class="modal-body">
+
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="col-12">
+                        <input asp-for="RequestId" type="hidden" />
+                        <input asp-for="LawyerId" type="hidden" />
+                        <input asp-for="UserId" type="hidden" />
+                        <input asp-for="Subject" type="hidden" />
+                        <input asp-for="Message" type="hidden" />
+                        <input asp-for="RequestDate" type="hidden" />
+                        <input asp-for="RequestStatus" type="hidden" />
+                        <input asp-for="ReviewStatus" type="hidden" />
+                    </div>
+
+                    <div class="col-12">
+                        <input asp-for="AssignedDate" class="form-control" />
+                        <span asp-validation-for="AssignedDate" class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div><!-- End Vertically centered Modal-->
+
+
+</form>
+
+
+
+@section Scripts {
+
+    <script>
+
+    </script>
+}

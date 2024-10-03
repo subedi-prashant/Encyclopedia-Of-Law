@@ -1,0 +1,46 @@
+﻿@model List<Encyclopedia_Of_Laws.Models.ClientLetter>
+
+@{
+    ViewData["Title"] = "View Letter";
+}
+
+<div class="pagetitle">
+    <h1>View Letter</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="UserHome">Home</a></li>
+            <li class="breadcrumb-item">Requests</li>
+            <li class="breadcrumb-item active">View Letter</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="container m-0">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var letter in Model)
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@letter.Subject</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">@letter.LetterDate?.ToString("yyyy-MM-dd")</h6>
+                            <p class="card-text">@letter.Message</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="row col">No letters found.</p>
+    }
+
+    <div class="row">
+        <div class="col">
+            <a asp-controller="Request" asp-action="GetRequestsByUser" class="btn btn-primary">Back to Requests</a>
+        </div>
+    </div>
+</div>

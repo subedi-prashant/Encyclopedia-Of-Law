@@ -1,0 +1,200 @@
+﻿
+body {
+    font-family: "Open Sans", sans-serif;
+}
+
+.form {
+    text-align: right;
+    padding-top: 50px;
+/*    margin-left: 1000px;*/
+   /* width:300px;*/
+}
+.head {
+    height: fit-content;
+    /*background-color: antiquewhite;*/
+}
+
+.label {
+    font-size: .625rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: +1.3px;
+    margin-bottom: 1rem;
+}
+
+.searchBar {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: 20px;
+}
+
+#searchQueryInput {
+    width: 100%;
+    height: 2.8rem;
+    background: #fff;
+    outline: none;
+    border: none;
+    border-radius: 1.625rem;
+    padding: 0 3.5rem 0 1.5rem;
+    font-size: 1rem;
+    border-radius: 25px;
+    border-color: rgba(255, 255, 255, var(--tw-border-opacity));
+    box-shadow: 0 2px 2px 0 rgb(84 110 122 / 6%), 0 3px 1px -2px rgb(84 110 122 / 12%), 0 10px 5px 0 rgb(84 110 122 / 20%);
+    border-width: 2px;
+}
+
+
+.searchpager {
+    width: 50%; /* طول البار */
+    max-width: 31.25rem;
+    margin: 0 15rem;
+    /*padding-left: 1070px;
+    width: 63pc*/
+}
+
+
+.search-field {
+    border-width: 2px;
+    border-color: darkblue;
+    border-radius: 1.5625rem;
+    text-align: right;
+    background: url(https://www.pngkey.com/png/full/15-152459_open-search-bar-icon-png.png) 7px 7px / 20px no-repeat white;
+    height: 45px;
+    padding-left: 100px;
+    font-size: 25px
+}
+
+#searchQuerySubmit {
+    width: 3.5rem;
+    height: 2.8rem;
+    margin-left: -3.5rem;
+    /* border: none;*/
+    outline: none;
+    border-top-right-radius: 1.625rem;
+    border-bottom-right-radius: 1.625rem;
+    align-items: stretch;
+    background: none;
+    padding: 0;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    background-color: darkblue;
+    box-shadow: 0 2px 2px 0 rgb(84 110 122 / 6%), 0 3px 1px -2px rgb(84 110 122 / 12%), 0 1px 5px 0 rgb(84 110 122 / 20%);
+}
+
+    #searchQuerySubmit:hover {
+        cursor: pointer;
+    }
+
+
+    #searchQuerySubmit:hover {
+        cursor: pointer;
+    }
+
+
+
+.border-blueGray-100 {
+    --tw-border-opacity: 1;
+    border-color: rgba(207, 216, 220, var(--tw-border-opacity));
+}
+
+.submit {
+    border-width: 2px;
+    border-color: darkblue;
+    border-radius: 1.5625rem;
+    width: 5pc;
+    /*border-radius: 10px;*/
+    background-color: lightgray;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: system-ui;
+}
+.body-content {
+    height: fit-content;
+    text-align: -webkit-center
+    /*background-color: orange;*/
+}
+.table {
+    border-collapse: collapse;
+    border: 4px solid grey;
+    /*width: auto;*/
+    font-weight: bolder;
+    font-family: system-ui;
+    font-size:18px
+    /*margin-left: 120px;*/
+}
+thead {
+    background-color: lightskyblue;
+    border-bottom: 4px solid gray;
+    font-size:20px;
+    color:black;
+    text-align: center
+}
+td, th {
+    border-bottom: 2px solid gray;
+    border-right: 1px solid gray
+}
+.table-rows {
+    height: 33%;
+    max-height: 100px;
+    background-color: white;
+    cursor: pointer;
+}
+.active, .table-rows:hover {
+    background-color: lightgray;
+}
+.processes {
+    text-align: center;
+    width: fit-content;
+
+}
+button {
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color:deepskyblue
+}
+button a {
+    color: black;
+    font-weight: 600;
+}
+.edit {
+    background-color: yellow;
+}
+
+.details {
+    background-color: limegreen;
+}
+
+.delete {
+    background-color: red;
+}
+.Add_contents{
+    background-color:orange;
+}
+.hidden_row {
+    display: none;
+    /*background-color: yellow;*/
+    text-align: right;
+    
+}
+.hidden_row .active{
+    display:block;
+}
+.first-row, .hidden_row {
+    text-align: right;
+}
+.footer-content {
+    /*height:fit-content;
+    background-color:black*/
+    position: absolute;
+    /*bottom: 0;*/
+    width: 100%;
+    height: 60px; /* Height of the footer */
+    background-color: black;
+}
+a{
+    color:blue;
+}

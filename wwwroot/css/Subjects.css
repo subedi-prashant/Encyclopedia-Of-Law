@@ -1,0 +1,221 @@
+﻿/*************************    seacrh bar style ******************/
+
+/******************************/
+
+.rounded-pill {
+    border-radius: 1rem
+}
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+}
+
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+}
+
+.wrapper {
+    width: 50%; /* طول البار */
+    max-width: 31.25rem;
+    margin: 3rem auto; /*3 لفوق وتحت auto يمين وشمال*/
+}
+
+.label {
+    font-size: .625rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: +1.3px;
+    margin-bottom: 1rem;
+}
+
+.searchBar {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#searchQueryInput {
+    width: 100%;
+    height: 2.8rem;
+    background: #fff;
+    outline: none;
+    border: none;
+    border-radius: 1.625rem;
+    padding: 0 3.5rem 0 1.5rem;
+    font-size: 1rem;
+    border-radius: 25px;
+    border-color: rgba(255, 255, 255, var(--tw-border-opacity));
+    box-shadow: 0 2px 2px 0 rgb(84 110 122 / 6%), 0 3px 1px -2px rgb(84 110 122 / 12%), 0 10px 5px 0 rgb(84 110 122 / 20%);
+    border-width: 2px;
+}
+
+#searchQuerySubmit {
+    width: 3.5rem;
+    height: 2.8rem;
+    margin-left: -3.5rem;
+    /* border: none;*/
+    outline: none;
+    border-top-right-radius: 1.625rem;
+    border-bottom-right-radius: 1.625rem;
+    align-items: stretch;
+    background: none;
+    padding: 0;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    background-color: darkblue;
+    box-shadow: 0 2px 2px 0 rgb(84 110 122 / 6%), 0 3px 1px -2px rgb(84 110 122 / 12%), 0 1px 5px 0 rgb(84 110 122 / 20%);
+}
+
+    #searchQuerySubmit:hover {
+        cursor: pointer;
+    }
+
+
+
+.border-blueGray-100 {
+    --tw-border-opacity: 1;
+    border-color: rgba(207, 216, 220, var(--tw-border-opacity));
+}
+
+.border-2 {
+    border-width: 2px;
+    border-color: darkblue;
+}
+
+.rounded-25 {
+    border-radius: 1.5625rem;
+}
+
+
+
+
+*, ::before, ::after {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: currentColor;
+}
+
+/***************************end of seach bar *******************************/
+
+/*canava ***************/
+
+
+/* end cava*/
+/*    .wrap-flex {
+                    display: flex;
+                }
+        */
+.form-group {
+    display: flex;
+}
+
+.topic {
+    background: #fafafa;
+    margin-bottom: 20px;
+    box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    position: relative;
+    border: solid 3px #00008B;
+    /*border-top: solid 1px #f2f2f2;*/
+    margin-left: 15px;
+    /*  border-radius: 5px;*/
+    margin-right: 20;
+    border-radius: 3rem;
+}
+
+.topic-paging {
+    margin: 0 20px 0 35px;
+}
+
+
+
+.mada-title {
+    color: #000;
+    font-size: 24px;
+    font-family: 'GESSTwoMediumRegular';
+}
+
+    .mada-title a {
+        color: #000;
+    }
+
+
+
+.editings-con {
+    top: 0px;
+    right: 140px;
+    position: absolute;
+    width: 250px;
+}
+
+.topic span.new {
+    color: #fff;
+    padding: 0 10px;
+    background: #00008B;
+    font-size: 9px;
+    font-family: tahoma;
+    margin-left: 3px;
+    line-height: 18px;
+    float: right;
+    border-radius: 0 0 3px 3px;
+}
+
+.topic .old {
+    color: #333;
+    padding: 0 10px;
+    background: #DDD;
+    font-size: 9px;
+    font-family: tahoma;
+    margin-left: 3px;
+    line-height: 18px;
+    float: right;
+    clear: left;
+    border-radius: 0 0 3px 3px;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: right;
+}
+
+p {
+    margin: 0 0 9px;
+}
+
+user agent stylesheet
+p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+.span9 {
+    /* width: 1200px;*/
+    width: 100%;
+    text-align: right;
+}
+
+.subjects {
+    background-color: lavender;
+}
+
+.a {
+    text-decoration: none;
+    color: aliceblue;
+}
+
+.span9 :hover {
+    background-color: #ccffff;
+}

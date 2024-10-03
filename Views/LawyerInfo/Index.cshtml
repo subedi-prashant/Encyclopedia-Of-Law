@@ -1,0 +1,188 @@
+﻿@model IEnumerable<Encyclopedia_Of_Laws.Models.LawyerInfo>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Title"] = "ListLawyers";
+
+    int intSno = 0;
+
+    Pager pager = new Pager();
+    int pagNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pagNo = pager.CurrentPage;
+    }
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="~/css/searchLawyer.css" rel="stylesheet" />
+
+<div class="pagetitle">
+    <h1>Lawyers</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Home</li>
+            <li class="breadcrumb-item active">Lawyers</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section dashboard">
+
+    <div class="wrapper">
+        <form asp-controller="LawyerInfo" asp-action="Index" method="get">
+            <div class="searchBar border-2 rounded-25">
+
+                <input id="searchQueryInput" type="text" name="SearchText" placeholder="Search" value="" />
+
+                <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
+                    <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                        <path fill="#fff" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
+                    </svg>
+                </button>
+            </div>
+
+            <br />
+            <div class="text-center">
+                @if (Model.Count() == 0)
+                {
+                    <div class="alert alert-danger alert-dismissible" id="not found">
+
+                        <strong id="not found">NotFound!</strong> search result not found.
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">
+                            <button type="button" class="btn-close">
+                                <span class="icon-cross"></span>
+                                <span class="visually-hidden">Close</span>
+                            </button>
+                        </a>
+                    </div>
+                    <br />
+                    <p class="text-center"> <a asp-controller="LawyerInfo" asp-action="Index">Back to Page</a></p>
+                }
+                else
+                {
+                    <span id="not found" class="hide"></span>       
+                }
+            </div>
+         
+
+        </form>
+    </div>
+    <!-- End Search Bar -->
+
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+            intSno = intSno + 1;
+            <div class="col-12 js-parent">
+                <div class="card mb-3">
+                   
+
+                    <div class="filter">
+                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <li><a class="dropdown-item" asp-action="Details" asp-route-id="@item.UserId">View Profile</a></li>
+                            @if (!User.IsInRole("Admin"))
+                            {
+                                @if(item.User.PhoneNumberConfirmed)
+                                {
+                                    <li><a class="dropdown-item" asp-controller="Request" asp-action="SendRequest" asp-route-id="@item.UserId">Send Request</a></li>
+                                }
+                            }
+
+                        </ul>
+                    </div>
+                    <div class="row no-gutters" style="--bs-gutter-x: 0;">
+                        <div class="col-md-2 card-body profile-card pt-4 d-flex flex-column">
+                            @if (item.User.ProfilePicture != null)
+                            {
+                                <img src="~/images/@item.User.ProfilePicture" alt="Profile" class="rounded-circle">
+                            }
+                            else
+                            {
+                                <img src="~/images/user-male.jpg" alt="Profile" class="rounded-circle">
+                            }
+
+                        </div>
+                        <div class="col-md-10">
+                            <div class="card-body d-flex flex-column justify-content-between h-100">
+                                <div>
+                                    <h5 class="card-title">
+                                        @item.User.FirstName @item.User.LastName <br />
+                                        <span>@item.User.Email </span>
+                                    </h5>
+                                    <p> <i class="bi bi-geo-alt-fill"></i> @item.User.Address, @item.User.Country  </p>
+                                    <p> @item.Information </p>
+                                    @* <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> *@
+                                    <div class="social-links mt-2">
+                                        <a href="@item.Twitter" class="twitter"><i class="bi bi-twitter"></i></a>
+                                        <a href="@item.Facebook" class="facebook"><i class="bi bi-facebook"></i></a>
+                                        <a href="@item.Instagram" class="instagram"><i class="bi bi-instagram"></i></a>
+                                        <a href="@item.LinkedIn" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        }
+    </div>
+</section>
+<section>
+    <div class="row" style="justify-content: center;">
+        <div id="map" style="height: 400px; width: 60%"></div>
+    </div>
+</section>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script>
+        var map = L.map('map').fitWorld();
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        map.locate({ setView: true, maxZoom: 16 });
+
+        function onLocationFound(e) {
+            var radius = e.accuracy;
+
+            L.marker(e.latlng).addTo(map)
+                .bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+            L.circle(e.latlng, radius).addTo(map);
+        }
+
+        map.on('locationfound', onLocationFound);
+
+        // Add markers for lawyer locations
+        @foreach (var lawyer in Model)
+        {
+            if (lawyer.Lat != null && lawyer.Long != null)
+            {
+                <text>
+                    var lawyerLatLng = L.latLng(@lawyer.Lat, @lawyer.Long);
+                    L.marker(lawyerLatLng).addTo(map)
+                        .bindPopup("@lawyer.User.UserName: Latitude " + @lawyer.Lat + ", Longitude " + @lawyer.Long).openPopup();
+                </text>
+            }
+        }
+
+        // var specificLatLng = L.latLng(27.6756, 85.3459);
+        // L.marker(specificLatLng).addTo(map)
+        //     .bindPopup("This is a specific location at latitude " + specificLatLng.lat + " and longitude " + specificLatLng.lng).openPopup();
+    </script>
+
+}

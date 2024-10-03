@@ -1,0 +1,115 @@
+﻿@model Encyclopedia_Of_Laws.ViewModels.EditProfileViewModel
+
+@{
+    ViewData["Title"] = "Profile";
+    var photoPath = "~/images/" + (Model.ExistingPhotoPath);
+}
+
+<div class="pagetitle">
+    <h1>Account</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Account</li>
+            <li class="breadcrumb-item active">Profile</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section profile">
+    <div class="row">
+        <div class="col-xl-4">
+
+            <div class="card">
+                <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+                    @if (Model.ExistingPhotoPath != null)
+                    {
+                        <img src="~/images/@Model.ExistingPhotoPath" alt="Profile" class="rounded-circle">
+                    }
+                    else
+                    {
+                        <img alt="profile" class="rounded-circle" src="~/images/user-male.jpg" />
+                    }
+          
+                    <h2>@Model.FirstName @Model.LastName</h2>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-xl-8">
+
+            <div class="card">
+                <div class="card-body pt-3">
+                    <!-- Bordered Tabs -->
+                    <ul class="nav nav-tabs nav-tabs-bordered">
+
+                        <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                        </li>
+
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-Account">Account</button>
+                        </li>
+
+
+                    </ul>
+
+                    <div class="tab-content pt-2">
+
+                        <div class="tab-pane fade show active profile-overview" id="profile-overview">
+
+                            <h5 class="card-title">Profile Details</h5>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Email</div>
+                                <div class="col-lg-9 col-md-8">@Model.Email</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Name</div>
+                                <div class="col-lg-9 col-md-8">@Model.FirstName @Model.LastName</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Username</div>
+                                <div class="col-lg-9 col-md-8">@Model.UserName</div>
+                            </div>
+
+                            @if (!User.IsInRole("Admin") || !User.IsInRole("Staff"))
+                            {
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Country</div>
+                                    <div class="col-lg-9 col-md-8">@Model.Country</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">City</div>
+                                    <div class="col-lg-9 col-md-8">@Model.City</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Address</div>
+                                    <div class="col-lg-9 col-md-8">@Model.Address</div>
+                                </div>
+
+                            }
+
+                        </div>
+
+
+                        <div class="tab-pane fade pt-3" id="profile-Account">
+                            <partial name="Edit" />
+                        </div>
+
+                    </div><!-- End Bordered Tabs -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+

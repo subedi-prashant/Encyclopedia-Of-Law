@@ -1,0 +1,16 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    @*If the user is signed-in display Logout link*@
+
+if (SignInManager.IsSignedIn(User))
+{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+
+}
+else
+{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+}

@@ -1,0 +1,178 @@
+﻿@model IEnumerable<Encyclopedia_Of_Laws.Models.Request>
+
+@{
+    ViewData["Title"] = "GetScheduleByUser";
+    // Define userOrLayer based on server-side logic
+    var userOrLayer = (User.IsInRole("User")) ? "User" : (User.IsInRole("Lawyer") ? "Lawyer" : null);
+}
+<style>
+
+   
+
+    #calendar {
+        max-width: 1000px;
+        margin: 50px 100px;
+    }
+
+   
+</style>
+
+
+
+<div class="pagetitle">
+    <h1>Schedule</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="UserHome">Home</a></li>
+            <li class="breadcrumb-item active">Schedule</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+
+
+<div class="card">
+    <div class="card-body">
+
+        <!-- Table with hoverable rows -->
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    @if (User.IsInRole("User"))
+                    {
+                        <th scope="col">Lawyer</th>
+                    }
+                    else if (User.IsInRole("Lawyer"))
+                    {
+                        <th scope="col"> User </th>
+                    }
+                    <th scope="col">Date</th>
+                    <th scope="col">Time</th>
+                    <th scope="col"> Status</th>
+
+                    <th scope="col">  </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Where(p => p.RequestStatus == "Assigned" || p.RequestStatus == "Confirmed"))
+                {
+                    <tr>
+                        @if (User.IsInRole("User"))
+                        {
+                            <td>@Html.DisplayFor(modelItem => item.Lawyer.UserName) </td>
+                        }
+                        else if (User.IsInRole("Lawyer"))
+                        {
+                            <td> @Html.DisplayFor(modelItem => item.User.UserName)</td>
+                        }
+
+                        <td> @Convert.ToDateTime(@item.AssignedDate).ToString("MM/dd/yyyy")</td>
+
+                        <td>@Convert.ToDateTime(@item.AssignedDate).ToString("hh:mm tt")</td>
+
+                        <td>@Html.DisplayFor(modelItem => item.RequestStatus)</td>
+
+
+                        <td>
+                            @* <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="ajax-modal-Details" data-bs-target="#Details"
+                                    data-url="@Url.Action($"GetDetailsByUser/{item.RequestId}", "Request")">
+                                <i class="bi bi-eye"></i>
+                                Details
+                            </button> *@
+
+                            @if (item.RequestStatus == "Assigned")
+                            {
+                                @if (User.IsInRole("User"))
+                                {
+                                    <a href="javascript:;" class="btn btn-success btn-sm js-Confirm" data-id="@item.RequestId">
+                                        <i class=""></i>
+                                        Confirm
+                                    </a>
+                                    <a href="javascript:;" class="btn btn-danger btn-sm js-Cancel" data-id="@item.RequestId">
+                                        <i class="bi bi-x"></i>
+                                        Cancel
+                                    </a>
+                                }
+                                else if (User.IsInRole("Lawyer"))
+                                {
+                                    @* <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="ajax-modal-Assign" data-bs-target="#Assign"
+                                            data-url="@Url.Action($"AssignDate/{item.RequestId}", "Request")">
+                                        <i class="bi bi-pencil"></i>
+                                        Edit Date
+                                    </button> *@
+                                    <a href="javascript:;" class="btn btn-danger btn-sm js-Reject" data-id="@item.RequestId">
+                                        <i class="bi bi-x"></i>
+                                        Reject
+                                    </a>
+                                }
+                            }
+                            else if (item.RequestStatus == "Confirmed")
+                            {
+                                if (User.IsInRole("Lawyer"))
+                                {
+                                    <a href="javascript:;" class="btn btn-success btn-sm js-Complete" data-id="@item.RequestId">
+                                        <i class="bi bi-check"></i>
+                                        Complete
+                                    </a>
+                                }
+                            }
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        <!-- End Table with hoverable rows -->
+
+    </div>
+    <div id="calendar"></div>
+</div>
+
+@section Scripts {
+     <script src="~/Scripts/index.global.js"></script> 
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            function formatDateTime(dateTime) {
+                const d = new Date(dateTime);
+                const formattedDateTime = d.toISOString().slice(0, 19).replace('T', ' ');
+                return formattedDateTime;
+            }
+            var calendarEl = document.getElementById('calendar');
+
+            var scheduleArray = @Html.Raw(Json.Serialize(Model
+                .Where(p => p.RequestStatus == "Assigned" || p.RequestStatus == "Confirmed")
+                .Select(x => new
+            {
+                title = (userOrLayer == "User") ? x.Lawyer.UserName : (userOrLayer == "Lawyer") ? x.User.UserName:" ",
+                start = x.AssignedDate,
+                color = (x.RequestStatus == "Assigned") ? "yellow" : "green"
+            })));
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                    left: 'prev,next today',
+                    // left: 'prevYear,prev,next,nextYear today',
+                    center: 'title',
+                    right: 'dayGridMonth,dayGridWeek,dayGridDay'
+                },
+                
+                initialDate: '2024-04-12',
+                navLinks: true,
+                editable: true,
+                dayMaxEvents: true,
+                events:scheduleArray
+                
+            });
+
+            calendar.render();
+        });
+    </script>
+   
+    <script src="~/starRating/site.js"></script>
+
+}

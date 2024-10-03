@@ -1,0 +1,96 @@
+﻿@model Encyclopedia_Of_Laws.Models.LawyerInfo
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="profile-create pt-3" id="profile-create">
+
+    <!-- Profile Edit Form -->
+    <form asp-action="Create">
+        <div class="row mb-3">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+            <div class="col-md-8 col-lg-9">
+                <img src="~/Layout/assets/img/profile-img.jpg" alt="Profile">
+                <div class="pt-2">
+                    <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
+                    <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="Specialization" class="control-label col-md-4 col-lg-3 col-form-label">Specialization</label>
+            <div class="col-md-8 col-lg-9">
+                <input asp-for="Specialization" class="form-control" />
+            </div>
+            <span asp-validation-for="Specialization" class="text-danger"></span>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="OfficeNumber" class="control-label col-md-4 col-lg-3 col-form-label">OfficeNumber</label>
+            <div class="col-md-8 col-lg-9">
+                <input asp-for="OfficeNumber" class="form-control" />
+            </div>
+            <span asp-validation-for="OfficeNumber" class="text-danger"></span>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="OfficeLocation" class="control-label col-md-4 col-lg-3 col-form-label">OfficeLocation</label>
+            <div class="col-md-8 col-lg-9">
+                <input asp-for="OfficeLocation" class="form-control" />
+            </div>
+            <span asp-validation-for="OfficeLocation" class="text-danger"></span>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="Information" class="control-label col-md-4 col-lg-3 col-form-label">Information</label>
+            <div class="col-md-8 col-lg-9">
+                <input asp-for="Information" class="form-control" />
+            </div>
+            <span asp-validation-for="Information" class="text-danger"></span>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="JopDescription" class="control-label col-md-4 col-lg-3 col-form-label">JopDescription</label>
+            <div class="col-md-8 col-lg-9">
+                <input asp-for="JopDescription" class="form-control" />
+            </div>
+            <span asp-validation-for="JopDescription" class="text-danger"></span>
+        </div>
+
+        <div class="row mb-3">
+            <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter Profile</label>
+            <div class="col-md-8 col-lg-9">
+                <input name="twitter" type="text" class="form-control" id="Twitter" value="https://twitter.com/#">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook Profile</label>
+            <div class="col-md-8 col-lg-9">
+                <input name="facebook" type="text" class="form-control" id="Facebook" value="https://facebook.com/#">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="Instagram" class="col-md-4 col-lg-3 col-form-label">Instagram Profile</label>
+            <div class="col-md-8 col-lg-9">
+                <input name="instagram" type="text" class="form-control" id="Instagram" value="https://instagram.com/#">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin Profile</label>
+            <div class="col-md-8 col-lg-9">
+                <input name="linkedin" type="text" class="form-control" id="Linkedin" value="https://linkedin.com/#">
+            </div>
+        </div>
+
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+    </form><!-- End Profile Edit Form -->
+
+</div>

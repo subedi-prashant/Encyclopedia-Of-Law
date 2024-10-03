@@ -1,0 +1,16 @@
+﻿@model AddRoleViewModel
+
+<form method="post" asp-action="AddRole">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="input-group mb-3">
+        <input asp-for="RoleName" class="form-control" placeholder="Role name..." />
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-primary">Add New Role</button>
+        </div>
+    </div>
+    <span asp-validation-for="RoleName" class="text-danger"></span>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

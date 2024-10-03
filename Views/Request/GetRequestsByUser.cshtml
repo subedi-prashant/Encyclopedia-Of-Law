@@ -1,0 +1,465 @@
+﻿@model IEnumerable<Encyclopedia_Of_Laws.Models.Request>
+
+@{
+    ViewData["Title"] = "GetRequestsByUser";
+}
+
+<div id="PlaceHoldelerHere">
+
+</div><!-- End Page Title -->
+
+
+
+<div class="pagetitle">
+    <h1>Requests</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="UserHome">Home</a></li>
+            <li class="breadcrumb-item active">Requests</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+
+
+<div class="card">
+    <div class="card-body">
+        <!-- Pills Tabs -->
+        <ul class="nav nav-pills" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">All</button>
+            </li>
+           @*  @foreach (var status in Model.Select(p => p.RequestStatus).OrderBy(RequestStatus => RequestStatus).Distinct().ToList())
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-@status-tab" data-bs-toggle="pill" data-bs-target="#pills-@status" type="button" role="tab" aria-controls="pills-@status" aria-selected="false">
+                        @status
+                    </button>
+                </li>
+            } *@
+        </ul>
+        <div class="tab-content pt-2" id="myTabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="mt-4">
+                    @if (!Model.Any())
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            No Requests found!
+                        </div>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <div class="col-12 js-parent">
+                                <div class="card mb-3" style="box-shadow: none;">
+                                    <div class="card-header d-flex justify-content-between" style="background-color: #f8f6f8">
+                                        Date : @item.RequestDate
+                                        @if (item.RequestStatus == "Pending")
+                                        {
+                                            <button type="button" class="btn btn-secondary" >@item.RequestStatus!</button>
+                                        }
+                                        else if (item.RequestStatus == "Assigned")
+                                        {
+                                            <button type="button" class="btn btn-warning" >@item.RequestStatus!</button>
+                                        }
+                                        else if (item.RequestStatus == "Completed")
+                                        {
+                                            <button type="button" class="btn btn-primary" >@item.RequestStatus!</button>
+                                        }
+                                        else if (item.RequestStatus == "Confirmed")
+                                        {
+                                            <button type="button" class="btn btn-success" >@item.RequestStatus!</button>
+                                        }
+                                        else if (item.RequestStatus == "Cancelled" || item.RequestStatus == "Rejected")
+                                        {
+                                            <button type="button" class="btn btn-danger" >@item.RequestStatus!</button>
+                                        }
+
+                                    </div>
+                                    <div class="row no-gutters" style="--bs-gutter-x: 0;">
+                                        <div class="col-md-2 card-body profile-card pt-4 d-flex flex-column">
+                                            @if (User.IsInRole("User"))
+                                            {
+                                                @if (item.Lawyer.ProfilePicture != null)
+                                                {
+                                                    <img src="~/images/@item.Lawyer.ProfilePicture" alt="Profile" class="rounded-circle">
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/images/user-male.jpg" alt="Profile" class="rounded-circle">
+                                                }
+
+                                            }
+                                            else if (User.IsInRole("Lawyer"))
+                                            {
+                                                @if (item.User.ProfilePicture != null)
+                                                {
+                                                    <img src="~/images/@item.User.ProfilePicture" alt="Profile" class="rounded-circle">
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/images/user-male.jpg" alt="Profile" class="rounded-circle">
+                                                }
+
+                                            }
+                                        </div>
+                                        <div class="col-md-10">
+                                            <div class="card-body d-flex flex-column justify-content-between h-100">
+                                                <div>
+                                                    @if (User.IsInRole("User"))
+                                                    {
+                                                        <h5 class="card-title">Lawyer Email: @item.Lawyer.Email</h5>
+                                                    }
+                                                    else if (User.IsInRole("Lawyer"))
+                                                    {
+                                                        <h5 class="card-title">User Email: @item.User.Email</h5>
+                                                    }
+                                                    <p class="card-text text-justify">
+                                                        <h6> @item.Subject </h6>
+                                                        <span>  @item.Message </span> <br />
+                                                        <span> <i class="bi bi-clock"></i></span> @item.AssignedDate <br />
+                                                    </p>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+
+                                                    <p class="card-text mb-0 mt-2">
+                                                        @for (int i = 1; i <= item.Rating; i++)
+                                                        {
+                                                            <i class="bi bi-star-fill text-warning"></i>
+                                                            <small class="text-muted"></small>
+                                                        }
+
+
+                                                    </p>
+                                                    <div>
+                                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="ajax-modal-Details" data-bs-target="#Details"
+                                                                data-url="@Url.Action($"GetDetailsByUser/{item.RequestId}", "Request")">
+                                                            <i class="bi bi-eye"></i>
+                                                            Details
+                                                        </button>
+                                                        @if (User.IsInRole("Lawyer"))
+                                                        {
+                                                            @if (item.RequestStatus == "Confirmed")
+                                                            {
+                                                                <a class="btn btn-info" asp-controller="ClientLetter" asp-action="SendLetter" asp-route-id="@item.RequestId">Draft Letter</a>
+                                                            }   
+                                                        }
+                                                        @if (User.IsInRole("User"))
+                                                        {
+                                                            @if (item.RequestStatus == "Confirmed")
+                                                            {
+                                                                <a class="btn btn-info" asp-controller="ClientLetter" asp-action="ViewLetter" asp-route-id="@item.RequestId">View Letters</a>
+                                                            }
+
+                                                            @if (item.RequestStatus == "Completed")
+                                                            {
+                                                                <a class="btn btn-info" asp-controller="Payment" asp-action="InitiatePay" asp-route-lawyerId="@item.LawyerId" asp-route-lawyerName ="@item.Lawyer.UserName" target="_blank">Pay</a>
+                                                            }
+                                                        }
+                                                        @if (User.IsInRole("User"))
+                                                        {
+                                                            @if (item.RequestStatus == "Pending")
+                                                            {
+                                                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="ajax-modal-Request" data-bs-target="#Request"
+                                                                        data-url="@Url.Action($"EditByUser/{item.RequestId}", "Request")">
+                                                                    <i class="bi bi-pencil"></i>
+                                                                    Edit
+                                                                </button>
+                                                                <a href="javascript:;" class="btn btn-danger js-delete" data-id="@item.RequestId">
+                                                                    <i class="bi bi-trash"></i>
+                                                                    Delete
+                                                                </a>
+                                                            }
+                                                            else if (item.RequestStatus == "Assigned")
+                                                            {
+                                                                <a href="javascript:;" class="btn btn-success js-Confirm" data-id="@item.RequestId">
+                                                                    <i class=""></i>
+                                                                    Confirm
+                                                                </a>
+                                                                <a href="javascript:;" class="btn btn-danger js-Cancel" data-id="@item.RequestId">
+                                                                    <i class="bi bi-x"></i>
+                                                                    Cancel
+                                                                </a>
+
+                                                            }
+                                                            else if (item.RequestStatus == "Completed")
+                                                            {
+                                                                @if (item.ReviewStatus == "Reviewed")
+                                                                {
+                                                                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="ajax-modal" data-bs-target="#AddReview"
+                                                                            data-url="@Url.Action($"EditReview/{item.RequestId}", "Review")">
+                                                                        Review
+                                                                    </button>
+
+                                                                  
+                                                                }
+                                                                else if (item.ReviewStatus == "NotReviewed")
+                                                                {
+                                                                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="ajax-modal" data-bs-target="#AddReview"
+                                                                            data-url="@Url.Action($"AddReview/{item.RequestId}", "Review")">
+                                                                        Review
+                                                                    </button>
+                                                                }
+                                                            }
+
+                                                        }
+
+                                                        else if (User.IsInRole("Lawyer"))
+                                                        {
+
+                                                            @if (item.RequestStatus == "Pending")
+                                                            {
+                                                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="ajax-modal-Assign" data-bs-target="#Assign"
+                                                                        data-url="@Url.Action($"AssignDate/{item.RequestId}", "Request")">
+                                                                    <i class="bi bi-pencil"></i>
+                                                                    Assign
+                                                                </button>
+                                                                <a href="javascript:;" class="btn btn-danger js-Reject" data-id="@item.RequestId">
+                                                                    <i class="bi bi-x"></i>
+                                                                    Reject
+                                                                </a>
+                                                            }
+                                                            else if (item.RequestStatus == "Assigned")
+                                                            {
+                                                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="ajax-modal-Assign" data-bs-target="#Assign"
+                                                                        data-url="@Url.Action($"AssignDate/{item.RequestId}", "Request")">
+                                                                    <i class="bi bi-pencil"></i>
+                                                                    Edit Date
+                                                                </button>
+                                                                <a href="javascript:;" class="btn btn-danger js-Reject" data-id="@item.RequestId">
+                                                                    <i class="bi bi-x"></i>
+                                                                    Reject
+                                                                </a>
+                                                            }
+                                                            else if (item.RequestStatus == "Confirmed")
+                                                            {
+                                                                <a href="javascript:;" class="btn btn-success js-Complete" data-id="@item.RequestId">
+                                                                    <i class="bi bi-check"></i>
+                                                                    Complete
+                                                                </a>
+
+                                                            }
+
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            @foreach (var item in Model)
+            {
+                <div class="tab-pane fade" id="pills-@item.RequestStatus" role="tabpanel" aria-labelledby="@item.RequestStatus-tab">
+                    <div class="mt-4">
+                        @if (!Model.Any())
+                        {
+                            <div class="alert alert-warning" role="alert">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                No Requests found!
+                            </div>
+                        }
+                        else
+                        {
+                            @foreach (var request in Model.Where(p => p.RequestStatus == item.RequestStatus))
+                            {
+                    <div class="card mb-3 " style="box-shadow: none;">
+                        <div class="card-header d-flex justify-content-between" style="background-color: #f8f6f8">
+                            Date : @request.RequestDate
+                            @if (item.RequestStatus == "Pending")
+                            {
+                                <a class="btn btn-secondary">@request.RequestStatus</a>
+                            }
+                            else if (item.RequestStatus == "Assigned")
+                            {
+                                <a class="btn btn-warning">@request.RequestStatus</a>
+                            }
+                            else if (item.RequestStatus == "Completed")
+                            {
+                                <a class="btn btn-primary">@request.RequestStatus</a>
+                            } 
+                            else if (item.RequestStatus == "Confirmed")
+                            {
+                                <a class="btn btn-success">@request.RequestStatus</a>
+                            }
+                            else if (item.RequestStatus == "Cancelled" || item.RequestStatus == "Rejected")
+                            {
+                                <a class="btn btn-danger">@request.RequestStatus</a>
+                            }
+
+                        </div>
+                        <div class="row no-gutters" style="--bs-gutter-x: 0;">
+                            <div class="col-md-2 card-body profile-card pt-4 d-flex flex-column ">
+                                @if (User.IsInRole("User"))
+                                {
+                                    @if (item.Lawyer.ProfilePicture != null)
+                                    {
+                                        <img src="~/images/@item.Lawyer.ProfilePicture" alt="Profile" class="rounded-circle">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/images/user-male.jpg" alt="Profile" class="rounded-circle">
+                                    }
+
+                                }
+                                else if (User.IsInRole("Lawyer"))
+                                {
+                                    @if (item.User.ProfilePicture != null)
+                                    {
+                                        <img src="~/images/@item.User.ProfilePicture" alt="Profile" class="rounded-circle">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/images/user-male.jpg" alt="Profile" class="rounded-circle">
+                                    }
+
+                                }
+
+                            </div>
+                            <div class="col-md-10">
+                                <div class="card-body d-flex flex-column justify-content-between h-100">
+                                    <div>
+                                        @if (User.IsInRole("User"))
+                                        {
+                                            <h5 class="card-title">Lawyer Email: @request.Lawyer.Email</h5>
+                                        }
+                                        else if (User.IsInRole("Lawyer"))
+                                        {
+                                            <h5 class="card-title">User Email: @request.User.Email</h5>
+                                        }
+                                        <p class="card-text text-justify">
+                                            <h6> @item.Subject </h6><br />
+                                            <span>  @item.Message </span> <br />
+                                            <span> <i class="bi bi-clock"></i></span> @item.AssignedDate <br />
+                                        </p>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <p class="card-text mb-0 mt-2">
+                                            @for (int i = 1; i <= request.Rating; i++)
+                                            {
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <small class="text-muted"></small>
+                                            }
+                                        </p>
+                                        <div>
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="ajax-modal-Details" data-bs-target="#Details"
+                                                    data-url="@Url.Action($"GetDetailsByUser/{item.RequestId}", "Request")">
+                                                <i class="bi bi-eye"></i>
+                                                Details
+                                            </button>
+                                            @if (User.IsInRole("User"))
+                                            {
+                                                @if (item.RequestStatus == "Pending")
+                                                {
+                                                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="ajax-modal-Request" data-bs-target="#Request"
+                                                            data-url="@Url.Action($"EditByUser/{item.RequestId}", "Request")">
+                                                        <i class="bi bi-pencil"></i>
+                                                        Edit
+                                                    </button>
+                                                    <a href="javascript:;" class="btn btn-danger js-delete" data-id="@item.RequestId">
+                                                        <i class="bi bi-trash"></i>
+                                                        Delete
+                                                    </a>
+                                                }
+                                                else if (item.RequestStatus == "Assigned")
+                                                {
+                                                    <a href="javascript:;" class="btn btn-success js-Confirm" data-id="@item.RequestId">
+                                                        <i class=""></i>
+                                                        Confirm
+                                                    </a>
+                                                    <a href="javascript:;" class="btn btn-danger js-Cancel" data-id="@item.RequestId">
+                                                        <i class="bi bi-x"></i>
+                                                        Cancel
+                                                    </a>
+
+                                                }
+                                                else if (item.RequestStatus == "Completed")
+                                                {
+                                                    @if (item.ReviewStatus == "Reviewed")
+                                                    {
+                                                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="ajax-modal" data-bs-target="#AddReview"
+                                                                data-url="@Url.Action($"EditReview/{item.RequestId}", "Review")">
+                                                            Review
+                                                        </button>
+                                                    }
+                                                    else if (item.ReviewStatus == "NotReviewed")
+                                                    {
+                                                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="ajax-modal" data-bs-target="#AddReview"
+                                                                data-url="@Url.Action($"AddReview/{item.RequestId}", "Review")">
+                                                            Review
+                                                        </button>
+                                                    }
+                                                }
+
+                                            }
+
+                                            else if (User.IsInRole("Lawyer"))
+                                            {
+
+                                                @if (item.RequestStatus == "Pending")
+                                                {
+                                                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="ajax-modal-Assign" data-bs-target="#Assign"
+                                                            data-url="@Url.Action($"AssignDate/{item.RequestId}", "Request")">
+                                                        <i class="bi bi-pencil"></i>
+                                                        Assign
+                                                    </button>
+                                                    <a href="javascript:;" class="btn btn-danger js-Reject" data-id="@item.RequestId">
+                                                        <i class="bi bi-x"></i>
+                                                        Reject
+                                                    </a>
+                                                }
+                                                else if (item.RequestStatus == "Assigned")
+                                                {
+                                                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="ajax-modal-Assign" data-bs-target="#Assign"
+                                                            data-url="@Url.Action($"AssignDate/{item.RequestId}", "Request")">
+                                                        <i class="bi bi-pencil"></i>
+                                                         Edit Date
+                                                    </button>
+                                                    <a href="javascript:;" class="btn btn-danger js-Reject" data-id="@item.RequestId">
+                                                        <i class="bi bi-x"></i>
+                                                        Reject
+                                                    </a>
+                                                }
+                                                else if (item.RequestStatus == "Confirmed")
+                                                {
+                                                    <a href="javascript:;" class="btn btn-success js-Complete" data-id="@item.RequestId">
+                                                        <i class="bi bi-check"></i>
+                                                        Complete
+                                                    </a>
+
+                                                }
+
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                            }
+
+                        }
+                    </div>
+                </div>
+            }
+        </div><!-- End Pills Tabs -->
+
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script src="~/starRating/site.js"></script>
+
+}

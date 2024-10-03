@@ -1,0 +1,70 @@
+﻿@model Encyclopedia_Of_Laws.ViewModels.LawyerViewModel
+
+@{
+    ViewData["Title"] = "GetAllLawyerReviews";
+}
+
+<div class="profile-edit pt-3" id="profile-review" style="padding-top: initial !important;">
+
+    <div class="mt-4">
+        <div class="card" style=" box-shadow: none !important; ">
+            @if (!Model.Reviews.Any())
+            {
+                <div class="alert alert-warning" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    No Reviews found!
+                </div>
+            }
+            else
+            {
+                @foreach (var item in Model.Reviews)
+                {
+                    <div class=" d-flex justify-content-between" >
+                        Date : @item.ReviewDate
+                        <a class="btn btn-secondary btn-sm">@item.RequestStatus</a>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-md-2 card-body profile-card pt-4 d-flex flex-column align-items-center">
+                            @{
+                                var profilePics = Model.ProfilePics.ToList();
+                                string userImage = string.Empty;
+                                if (profilePics.Count > 0)
+                                {
+                                    int index = Model.Reviews.IndexOf(item);
+                                    if (index >= 0 && index < profilePics.Count)
+                                    {
+                                        userImage = Url.Content("~/images/" + profilePics[index]);
+                                    }
+                                }
+                            }
+                            <img style="width: 60px;" src="@userImage" alt="Profile" class="rounded-circle">
+                        </div>
+                        <div class="col-md-10">
+                            <div class="card-body d-flex flex-column justify-content-between h-100">
+                                <h6 class="card-title">
+                                    @item.User.FirstName @item.User.LastName
+                                    @for (int i = 1; i <= item.Rating; i++)
+                                    {
+                                        <i class="bi bi-star-fill text-warning"></i>
+                                        <small class="text-muted"></small>
+                                    }
+                                    <br />
+                                    <span>@item.User.Email </span>
+                                </h6>
+                                <div>
+                                    <span> Review :</span> @item.Review <br />
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                }
+            }
+
+
+        </div>
+    </div>
+
+</div>

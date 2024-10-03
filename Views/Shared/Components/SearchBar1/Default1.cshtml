@@ -1,0 +1,57 @@
+﻿@using Encyclopedia_Of_Laws.Views.Shared.Components.SearchBar1
+@model SPager
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <div class="search">
+        <form asp-controller="@Model.Controller" asp-action="@Model.Action" class="form">
+            <span>
+                <div class="searchBar border-2 rounded-25">
+                    <input id="searchQueryInput" type="text" name="SearchText" value="@Model.SearchText" placeholder="@ViewBag.Possible_Search" />
+                    <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
+                        <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                            <path fill="#fff" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
+                        </svg>
+                    </button>
+                </div>
+                 
+
+                    @if (Model.TotalPages > 1)
+                    {
+                        <br />
+                        <br />
+                        <ul class="pagination justify-content-end" style="font-size:18px">
+                            @if (Model.CurrentPage < Model.TotalPages)
+                            {
+                                <li>
+                                    <a class="page-link" asp-controller="@(Model.Controller)" asp-action="@(Model.Action)" asp-route-pg="@(Model.TotalPages)">الأخــير</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" asp-controller="@(Model.Controller)" asp-action="@(Model.Action)" asp-route-pg="@(Model.CurrentPage + 1)">التــالي</a>
+                                </li>
+                            }
+                            @for (var pge = Model.EndPage; pge >= Model.StartPage; pge--)
+                            {
+                                <li class="page-item @(pge == Model.CurrentPage ? "active" : "")">
+                                    <a class="page-link" asp-controller="@(Model.Controller)" asp-action="@(Model.Action)" asp-route-pg="@pge">@pge</a>
+                                </li>
+                            }
+                            @if (Model.CurrentPage > 1)
+                            {
+                                <li>
+                                    <a class="page-link" asp-controller="@(Model.Controller)" asp-action="@(Model.Action)" asp-route-pg="@(Model.CurrentPage -1)">الســـابق</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" asp-controller="@(Model.Controller)" asp-action="@(Model.Action)" asp-route-pg="1">الأول</a>
+                                </li>
+                            }
+                        </ul>
+                    }
+            </span>
+        </form>
+    </div>
+    <div class="container">
+
+    </div>

@@ -1,0 +1,62 @@
+﻿@inject Encyclopedia_Of_Laws.Data.EncyclopediaOfLawsContext _context;
+
+
+
+
+    <section id="team" class="team">
+        <div class="container" data-aos="fade-up">
+
+            <div class="section-header">
+                <h2>Our Lawyers</h2>
+             
+            </div>
+
+            <div class="row gy-5">
+
+                @{
+                    var lawyerInfo = _context.LawyerInfos.ToList();
+                    @foreach (var item in lawyerInfo)
+                    {
+                        var id = item.UserId;
+                        var lawyer = _context.Users.Where(l => l.Id == id).FirstOrDefault();
+
+                        <div class="col-xl-4 col-md-6 d-flex" data-aos="zoom-in" data-aos-delay="200">
+                            <div class="team-member">
+                                <div class="member-img">
+                                    @if (@lawyer.ProfilePicture != null)
+                                    {
+                                        <img src="~/images/@lawyer.ProfilePicture" class="img-fluid" alt="" style="width: 500px;">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/images/user-male.jpg" class="img-fluid" alt="" style="width: 500px;">
+                                    }
+                                </div>
+                                <div class="member-info">
+                                    <div class="social">
+                                    <a href="@lawyer.LawyerInfo.Twitter"><i class="bi bi-twitter"></i></a>
+                                        <a href="@lawyer.LawyerInfo.Facebook"><i class="bi bi-facebook"></i></a>
+                                    <a href="@lawyer.LawyerInfo.Instagram"><i class="bi bi-instagram"></i></a>
+                                    <a href="@lawyer.LawyerInfo.LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                    </div>
+                                    <h4>@lawyer.FirstName @lawyer.LastName</h4>
+                                    <span>@item.JopDescription</span>
+                                </div>
+                            </div>
+                        </div><!-- End Team Member -->
+
+
+                    }
+                }
+
+
+
+
+
+
+
+
+            </div>
+
+        </div>
+    </section>

@@ -1,0 +1,237 @@
+﻿@model Encyclopedia_Of_Laws.ViewModels.LawyerViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="pagetitle">
+    <h1>View Lawyer Profile</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item">Lawyers</li>
+            <li class="breadcrumb-item active">Lawyer profile</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section profile">
+    <div class="row">
+        <div class="col-xl-4">
+
+            <div class="card">
+                <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+                    @if (!string.IsNullOrEmpty(Model.User.ProfilePicture))
+                    {
+                        string profileImageUrl = Url.Content("~/images/" + Model.User.ProfilePicture);
+                        <img src="@profileImageUrl" alt="Profile" class="rounded-circle">
+                    }
+                    else
+                    {
+                        <img src="~/Layout/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                    }
+
+                    @* <img src="~/Layout/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"> *@
+                    <h2>@Model.FirstName @Model.LastName</h2>
+                    <h3> </h3>
+                    <div class="social-links mt-2">
+                        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                    </div>
+
+                    <br />
+                    <div class="text-center">
+                        @if (!User.IsInRole("Admin"))
+                        {
+                            @if (Model.User.PhoneNumberConfirmed)
+                            {
+                                <a class="btn btn-primary" asp-controller="Request" asp-action="SendRequest" asp-route-id="@Model.UserId">Send Request</a>
+                            }
+                            else
+                            {
+                                <p><b>Not Verified  </b><i class="bi bi-x-square-fill"></i></p>
+                            }
+                        }
+                    </div>
+                    <div class="text-center" id="verification">
+                        @if (User.IsInRole("Admin"))
+                        {
+                            @if(!Model.User.PhoneNumberConfirmed)
+                            {
+                                <a href="javascript:;" class="btn btn-success js-verify" data-id="@Model.UserId">
+                                    verify Lawyer
+                                </a>
+                            }
+                            else
+                            {
+                                <p><b>Verified  </b><i class="bi bi-check-circle-fill"></i></p>
+
+
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-xl-8">
+
+            <div class="card">
+                <div class="card-body pt-3">
+                    <!-- Bordered Tabs -->
+                    <ul class="nav nav-tabs nav-tabs-bordered">
+
+                        <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                        </li>
+
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-reviews">Reviews</button>
+                        </li>
+
+
+                    </ul>
+
+                    <div class="tab-content pt-2">
+
+                        <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                            <h5 class="card-title">About</h5>
+                            <p class="small fst-italic">@Model.Information</p>
+
+                            <h5 class="card-title">Profile Details</h5>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Email</div>
+                                <div class="col-lg-9 col-md-8">@Model.Email</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Name</div>
+                                <div class="col-lg-9 col-md-8">@Model.FirstName @Model.LastName</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Username</div>
+                                <div class="col-lg-9 col-md-8">@Model.UserName</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Specialization</div>
+                                <div class="col-lg-9 col-md-8">@Model.Specialization</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">JopDescription</div>
+                                <div class="col-lg-9 col-md-8">@Model.JopDescription</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">OfficeLocation</div>
+                                <div class="col-lg-9 col-md-8">@Model.OfficeLocation</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">OfficeNumber</div>
+                                <div class="col-lg-9 col-md-8">@Model.OfficeNumber</div>
+                            </div>
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">License Picture</div>
+                                    <div class="col-lg-9 col-md-8">
+                                        @if (!string.IsNullOrEmpty(Model.User.LicensePhoto))
+                                        {
+                                            string licenseImageUrl = Url.Content("~/images/" + Model.User.LicensePhoto);
+                                            <img src="@licenseImageUrl" alt="License Picture" height="200px" width="400px">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/Layout/assets/img/lawyerlicense.jpeg" alt="License Picture" height="200px" width="400px">
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Citizenship Picture</div>
+                                    <div class="col-lg-9 col-md-8">
+                                        @if (!string.IsNullOrEmpty(Model.User.CitizenshipPhoto))
+                                        {
+                                            string licenseImageUrl = Url.Content("~/images/" + Model.User.CitizenshipPhoto);
+                                            <img src="@licenseImageUrl" alt="Citizenship Picture" height="200px" width="400px">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/Layout/assets/img/citizenship.jpg" alt="Citizenship Picture" height="200px" width="400px">
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+
+                        <div class="tab-pane fade pt-3" id="profile-reviews">
+                            <partial name="Reviews" />
+                        </div>
+
+                    </div><!-- End Bordered Tabs -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+
+    <script>
+        //Verify Lawyer Request
+        $(document).ready(function () {
+            $('.js-verify').on('click', function () {
+                var btn = $(this);
+
+                bootbox.confirm({
+                    closeButton: false,
+                    message: "Are you sure you want to verify this lawyer?",
+                    buttons: {
+                        confirm: {
+                            label: 'Ok',
+                            className: 'btn-danger'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-outline-secondary'
+                        }
+
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: '/Administration/VerifyLawyer/' + btn.data('id'),
+                                success: function () {
+                                    
+                                    toastr.success('Lawyer successfully verified');
+                                    $('#verification').html('<p><b>Verified  </b><i class="bi bi-check-circle-fill"></i></p>');
+                                },
+                                error: function () {
+                                    toastr.error('Something went wrong!');
+                                }
+                            });
+                        }
+                    }
+                });
+
+
+            });
+        });
+
+
+    </script>
+}

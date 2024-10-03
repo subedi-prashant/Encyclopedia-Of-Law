@@ -1,0 +1,35 @@
+﻿.row {
+    width: 90pc;
+    text-align: right;
+    margin-left: 450px
+}
+
+label {
+    font-size: 20px;
+    font-family: system-ui;
+    font-weight: 700
+}
+
+input {
+    height: 43px;
+    text-align: right;
+}
+
+#submit {
+    font-size: 23px;
+    width: 70px;
+}
+
+#back {
+    font-size: 22px;
+    font-weight: 600;
+}
+.form-select-sm{
+    font-size:23px;
+    text-align:right;
+}
+textarea {
+    font-size: 20px;
+    text-align: right;
+    width:300px
+}
